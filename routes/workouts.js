@@ -9,16 +9,18 @@ const {
   updateWorkout,
 } = require("../controllers/workouts");
 
+const requireAuth = require("../middleware/requireAuth");
+
 const router = Router();
 
 router.get("/", getWorkouts);
 
 router.get("/:id", getWorkout);
 
-router.post("/create", createWorkout);
+router.post("/create", requireAuth, createWorkout);
 
-router.put("/:id", updateWorkout);
+router.put("/:id", requireAuth, updateWorkout);
 
-router.delete("/:id", deleteWorkout);
+router.delete("/:id", requireAuth, deleteWorkout);
 
 module.exports = router;

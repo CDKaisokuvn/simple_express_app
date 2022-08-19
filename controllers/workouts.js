@@ -1,5 +1,6 @@
 const Workout = require("../models/workout");
 const mongoose = require("mongoose");
+const HttpError = require("../shared/HttpError");
 
 // Get all workouts
 const getWorkouts = async (req, res, next) => {
@@ -19,11 +20,11 @@ const getWorkout = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ msg: "Bad request", data: {} });
+      throw new HttpError("Bad Request", 400);
     }
     const workout = await Workout.findById(id);
     if (!workout) {
-      return res.status(404).json({ msg: "No such workout", data: {} });
+      throw new HttpError("No such workout", 404);
     }
 
     return res.status(200).json({ msg: "Sucess", data: workout });
@@ -50,7 +51,7 @@ const deleteWorkout = async (req, res, next) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ msg: "bad request", data: {} });
+      throw new HttpError("Bad Request", 400);
     }
 
     await Workout.findByIdAndDelete(id);
@@ -66,7 +67,7 @@ const updateWorkout = async (req, res, next) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ msg: "bad request", data: {} });
+      throw new HttpError("Bad Request", 400);
     }
 
     await Workout.findByIdAndUpdate(id, { ...req.body });
