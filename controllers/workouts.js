@@ -36,8 +36,9 @@ const getWorkout = async (req, res, next) => {
 // Post a workout
 const createWorkout = async (req, res, next) => {
   const { title, load, reps } = req.body;
+  console.log(req.user);
   try {
-    const workout = await Workout.create({ title, load, reps });
+    const workout = await Workout.create({ title, load, reps, user: req.user });
 
     return res.status(201).json({ msg: "Ok", data: workout });
   } catch (error) {
